@@ -1,7 +1,7 @@
-/*
-
 #include <Arduino.h>
-#include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
+#include <Wire.h>
+#include <RTClib.h>
 
 #ifndef DEFINICIONES_H
 
@@ -9,6 +9,37 @@
 
 #define I2C_SDA 21
 #define I2C_SCL 22
+#define RXD2 16  // RX de esta ESP (no conectado si solo transmite)
+#define TXD2 17  // TX hacia la ESP principal
+
+
+const byte NUM_FILAS = 4;
+const byte NUM_COLUMNAS = 4;
+
+// Definimos el mapa de teclas
+char teclas[NUM_FILAS][NUM_COLUMNAS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+// Pines que conectan las filas y columnas
+byte pinesFilas[NUM_FILAS] = {22, 5, 18, 19};
+byte pinesColumnas[NUM_COLUMNAS] = {15, 4, 13, 21};
+
+// Creamos el objeto Keypad
+Keypad teclado = Keypad(makeKeymap(teclas), pinesFilas, pinesColumnas, NUM_FILAS, NUM_COLUMNAS);
+RTC_DS3231 rtc;
+
+#endif
+/*
+
+
+
+
+
+
 
 #define pGreen      12 
 #define pWhite      27
@@ -40,6 +71,6 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 #define LedRedON        digitalWrite(lRed, HIGH)
 #define LedRedOFF       digitalWrite(lRed, LOW)
 
-#endif
+
 
 */
