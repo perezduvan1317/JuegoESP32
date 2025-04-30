@@ -15,10 +15,7 @@ String HOLA = "GET_DATE";
 
 void procesarComando(String cmd) {
   if (cmd == "GET_DATE") {
-    DateTime now = rtc.now();
-    byte dia = now.day();
-    Serial2.write(dia);  // Enviar como byte binario
-    Serial.println(dia);
+    
   }
 }
 
@@ -34,12 +31,12 @@ void loop() {
 
   // Escuchar comandos
   while (Serial2.available()) {
-    char c = Serial2.read();
-    if (c == '\n') {
-      procesarComando(comando);
-      comando = "";
-    } else {
-      comando += c;
+    byte c = Serial2.read();
+    if (c == 0x7E) {
+      DateTime now = rtc.now();
+      byte dia = now.day();
+      Serial2.write(dia);  // Enviar como byte binario
+      Serial.println(dia);
     }
   }
 }
