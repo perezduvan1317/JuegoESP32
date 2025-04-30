@@ -1,30 +1,45 @@
 #include "definiciones.h"
 
+String comando = "";
+
 void setup() {
+  Serial.begin(115200);
   Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
   Wire.begin();
   rtc.begin();
+
+  //rtc.adjust(DateTime(2025, 4, 29, 20, 23, 0));  // Año, Mes, Día, Hora, Minuto, Segundo
+}
+
+String HOLA = "GET_DATE";
+
+void procesarComando(String cmd) {
+  if (cmd == "GET_DATE") {
+    DateTime now = rtc.now();
+    byte dia = now.day();
+    Serial2.write(dia);  // Enviar como byte binario
+    Serial.println(dia);
+  }
 }
 
 void loop() {
-  // Detectar tecla
+  // Detectar teclas y enviarlas
   char tecla = teclado.getKey();
   if (tecla) {
-    DateTime now = rtc.now();
-    // Enviar todo como un paquete separado por "|"
-    Serial2.print("KEY|");
-    Serial2.print(tecla);
-    Serial2.print("|");
-    Serial2.print(now.day());
-    Serial2.print("/");
-    Serial2.print(now.month());
-    Serial2.print("/");
-    Serial2.print(now.year());
-    Serial2.print(" ");
-    Serial2.print(now.hour());
-    Serial2.print(":");
-    Serial2.print(now.minute());
-    Serial2.print(":");
-    Serial2.println(now.second());
+    Serial2.print("KEY:");
+    Serial2.println(tecla);
+    Serial.println(tecla);
+    //procesarComando(HOLA);
+  }
+
+  // Escuchar comandos
+  while (Serial2.available()) {
+    char c = Serial2.read();
+    if (c == '\n') {
+      procesarComando(comando);
+      comando = "";
+    } else {
+      comando += c;
+    }
   }
 }

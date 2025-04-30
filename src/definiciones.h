@@ -25,8 +25,8 @@ char teclas[NUM_FILAS][NUM_COLUMNAS] = {
 };
 
 // Pines que conectan las filas y columnas
-byte pinesFilas[NUM_FILAS] = {22, 5, 18, 19};
-byte pinesColumnas[NUM_COLUMNAS] = {15, 4, 13, 21};
+byte pinesFilas[NUM_FILAS] = {14, 5, 18, 19};
+byte pinesColumnas[NUM_COLUMNAS] = {15, 4, 13, 12};
 
 // Creamos el objeto Keypad
 Keypad teclado = Keypad(makeKeymap(teclas), pinesFilas, pinesColumnas, NUM_FILAS, NUM_COLUMNAS);
